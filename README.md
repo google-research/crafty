@@ -43,7 +43,6 @@ templatic instructions.
   The installation configs are described in detail in their `README.md`.
 
 
-
 **Data Setup and Source**
 
 To set up the dataset
@@ -75,6 +74,47 @@ the script), e.g. `_GAMMA_SHAPE_DISTANCE` adjusts how much do you want
 Crafty to favor close-by objects (more details can be found in `observe.py`
 docstrings).
 
+
+**Crafty-RxR data**
+
+Crafty-RxR is built from the [RxR dataset](https://github.com/google-research-datasets/RxR), wherein the instructions are replaced with Crafty-generated ones using the RxR paths. The data are saved as JSONs with dict, with the following data fields:
+
+* split: The annotation split (train/val_seen/val_unseen);
+* path_id: Uniquely identifies a path sampled from the Matterport3D environment;
+* scan: Uniquely identifies a scan in the Matterport3D environment;
+* path: A sequence of panoramic viewpoints along the path;
+* distance: The distance traveled in the navigation path.
+* heading: The initial heading in radians. Following R2R, the heading angle is zero facing the y-axis with z-up, and increases by turning right.
+* instructions: The navigation instructions (3 instructions per path).
+
+A sample entry is as follows
+
+```
+{"split": "crafty_RxR_val_seen",
+ "distance": 4.2938162285995976,
+ "scan": "rPc6DW4iMge",
+ "path_id": 28945,
+ "path": ["acbe920a0c5d4c018b1803ee9b1f331a",
+          "cabddb2506ee4bfcb2a1bcfa6625fe28",
+          "30030a9a530b40fc88825ca8fc32f855",
+          "f378f8971f7b41ccb0f2c1dc14ba290d"],
+ "heading": 0.6938930811500333,
+ "instructions": [
+     "you should see a door frame slightly right of you. bear right, so that it is in front of you. travel straight and go right, passing the door to the left. head forward, going along to the picture in front of you. face left. travel straight. stop when you get near the stair.",
+     "a door frame is a little on the right. curve right, so that it is ahead of you. go straight and turn right, passing the door to your left. you'll see a picture in front of you as you head straight. go left. a picture is on the right. walk straight to the stair and stop there.",
+     "a door frame is just on the right. go slightly right, so that it is ahead of you. proceed forward and make a right, passing the door on your left. walk forward, going along to the picture in front of you. you'll see a picture on your right as you go left. proceed forward, then wait by the stair."]}
+```
+
+Some statistics on the data:
+
+crafty_RxR_train      | File size: 46M (en); 120M (hi); 137M (te) | #Entries: 19,056
+crafty_RxR_val_seen   | File size: 5M (en); 15M (hi); 17M (te)    | #Entries: 2,365
+crafty_RxR_val_unseen | File size: 7M (en); 20M (hi); 23M (te)    | #Entries: 3,372
+
+The dataset is downloaded via
+```
+gsutil -m cp -R gs://crafty-rxr-data .
+```
 
 # License
 The Matterport3D dataset is governed by the
